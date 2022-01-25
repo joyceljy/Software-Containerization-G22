@@ -7,16 +7,10 @@ ENV ASPNETCORE_URLS=http://+:80
 FROM mcr.microsoft.com/dotnet/sdk:3.1-focal AS build
 WORKDIR /src
 
-RUN apt-get update && apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get install -y nodejs
-
 COPY ["Blog.csproj", "./"]
 RUN dotnet restore "Blog.csproj"
 COPY . .
 WORKDIR "/src/."
-
-RUN npm install
 
 RUN dotnet build "Blog.csproj" -c Release -o /app/build
 
