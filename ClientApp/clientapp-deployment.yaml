@@ -1,0 +1,22 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: angular-deployment 
+  labels: 
+    app: angular
+spec: 
+  replicas: 3 
+  selector: 
+    matchLabels: 
+      app: angular
+  template: 
+    metadata: 
+      labels: 
+        app: angular 
+    spec: 
+      containers: 
+      - name: angular-container 
+        image: angular:latest 
+        imagePullPolicy: IfNotPresent
+        ports: 
+        - containerPort: 80
