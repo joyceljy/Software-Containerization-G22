@@ -12,7 +12,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Blog.Models;
 using Blog.Data;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 
@@ -30,70 +29,50 @@ namespace Blog
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-            services.AddRazorPages();
+            services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularDevClient",
+                  builder =>
+                  {
+                      builder
+                      .WithOrigins("http://localhost:4200")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+                  });
+                options.AddPolicy("AllowAngularClient",
+                  builder =>
+                  {
+                      builder
+                      .WithOrigins("http://localhost")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+                  });
+            });
 
 		    services.AddDbContext<BlogPostsContext>(options =>
 		            options.UseSqlServer(Configuration.GetConnectionString("BlogPostsContext")));
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                       );
-            });
-
             services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
-
-            // In production, the Angular files will be served from this directory
-            //services.AddSpaStaticFiles(configuration =>
-            //{
-                //configuration.RootPath = "ClientApp/dist";
-            //});
-            services.AddApplicationInsightsTelemetry();
         }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-			}
-			else
-			{
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
-			}
+            app.UseCors("AllowAngularDevClient");
+            app.UseCors("AllowAngularClient");
 
-            app.UseCors("CorsPolicy");
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            if (env.IsDevelopment())
+            {          
+                app.UseDeveloperExceptionPage();
+            }
 
             app.UseRouting();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints=>
+            app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapRazorPages();
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
-
-
-            // app.UseSpa(spa =>
-            // {
-            //     // To learn more about options for serving an Angular SPA from ASP.NET Core,
-            //     // see https://go.microsoft.com/fwlink/?linkid=864501
-
-            //     //spa.Options.SourcePath = "ClientApp";
-            //     spa.Options.SourcePath = Path.Join(env.ContentRootPath, "ClientApp");
-
-            //     if (env.IsDevelopment())
-            //     {
-            //         spa.UseAngularCliServer(npmScript: "start");
-            //     }
-            // });
         }
 	}
 }
