@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: sc-netcore3-container
-        image: sc-netcore3:v1
+        image: localhost:32000/netv13:latest
         resources:
           limits:
             memory: "128Mi"

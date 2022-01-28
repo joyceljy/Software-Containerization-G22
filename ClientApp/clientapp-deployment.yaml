@@ -3,12 +3,12 @@ kind: Deployment
 metadata: 
   name: angular-deployment 
   labels: 
-    app: angular
+    app: angular 
 spec: 
   replicas: 3 
   selector: 
     matchLabels: 
-      app: angular
+      app: angular 
   template: 
     metadata: 
       labels: 
@@ -16,7 +16,6 @@ spec:
     spec: 
       containers: 
       - name: angular-container 
-        image: angular:latest 
-        imagePullPolicy: IfNotPresent
+        image: localhost:32000/angularv10:latest 
         ports: 
-        - containerPort: 80
+        - containerPort: 80 
