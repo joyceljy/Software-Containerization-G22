@@ -9,7 +9,8 @@ const routes: Routes = [
   { path: 'blogpost/:id', component: BlogPostComponent },
   { path: 'add', component: BlogPostAddEditComponent },
   { path: 'blogpost/edit/:id', component: BlogPostAddEditComponent },
-  { path: '**', redirectTo: '/' }
+  { path: '**', redirectTo: '/' },
+  { path: 'test', redirectTo: '/' }
 ];
 
 @NgModule({
