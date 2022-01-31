@@ -14,11 +14,11 @@ export class BlogPostService {
   myApiUrl: string;
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json; charset=utf-8'
+      'Content-Type':'application/json','Access-Control-Allow-Origins':'*'
     })
   };
   constructor(private http: HttpClient) {
-    this.myAppUrl = environment.appUrl;
+    this.myAppUrl = 'http://10.152.183.102:80/';
     this.myApiUrl = 'api/BlogPosts/';
   }
 
