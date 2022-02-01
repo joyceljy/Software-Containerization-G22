@@ -19,6 +19,8 @@ namespace Blog
 {
 	public class Startup
 	{
+        readonly string AllowCORS = "AllowCORS";
+        
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -30,15 +32,15 @@ namespace Blog
 		public void ConfigureServices(IServiceCollection services)
 		{
             services.AddControllers();
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-            {
-                builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            }));
+            services.AddCors(options => {
+                options.AddPolicy(name: AllowCORS, builder => {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); 
+                });
+            });
 
-		    services.AddDbContext<BlogPostsContext>(options =>
-		            options.UseSqlServer(Configuration.GetConnectionString("BlogPostsContext")));
+            IConfigurationSection dbConfig = Configuration.GetSection("DBConnection");
+            string connectionstring = "Host="+dbConfig["Host"]+";Port="+dbConfig["Port"]+";Username="+dbConfig["User"]+";Password="+dbConfig["Password"]+";Database="+dbConfig["Database"]+";";
+            services.AddDbContext<BlogPostsContext>(options => options.UseNpgsql(connectionstring));
 
             services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
         }
@@ -51,8 +53,8 @@ namespace Blog
             {          
                 app.UseDeveloperExceptionPage();
             }
-            app.UseHttpsRedirection();
-            app.UseCors("MyPolicy");
+            //app.UseHttpsRedirection();
+            app.UseCors(AllowCORS);
 
             app.UseRouting();
             app.UseAuthorization();
