@@ -7,7 +7,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: 5000
+    - protocol: {{ .Values.service.protocol }}
+      nodePort: {{ .Values.service.nodePort }}
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
   selector:
     {{- include "sc22-g22-app-chart.selectorLabels" . | nindent 4 }}
