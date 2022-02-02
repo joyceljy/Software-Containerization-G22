@@ -79,8 +79,6 @@ tolerations: []
 
 affinity: {}
 
-initialDelaySeconds: 60
-
 deployment:
   containers:
     ports:
