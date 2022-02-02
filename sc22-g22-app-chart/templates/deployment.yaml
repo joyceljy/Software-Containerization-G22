@@ -34,17 +34,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Value.image.containerPort }}
-          livenessProbe:
-            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
-            httpGet:
-              path: /
-              port: http
+            - containerPort: {{ .Values.image.containerPort }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
