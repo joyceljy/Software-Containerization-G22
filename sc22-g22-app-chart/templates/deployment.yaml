@@ -36,10 +36,12 @@ spec:
           ports:
             - containerPort: 5000
           livenessProbe:
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
             httpGet:
               path: /
               port: http
           readinessProbe:
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
             httpGet:
               path: /
               port: http
