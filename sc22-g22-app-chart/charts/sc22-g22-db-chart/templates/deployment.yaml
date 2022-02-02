@@ -34,21 +34,21 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
-            httpGet:
-              path: /
-              port: http
+            - containerPort: {{ .Values.deployment.containers.ports.containerPort }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.deployment.containers.envFrom.configMapRefName }}
+          env:
+            - name: {{ .Values.deployment.containers.env.secretKey }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.deployment.containers.env.secretName }}
+                  key: {{ .Values.deployment.containers.env.secretKey }}
+          volumeMounts:
+            - mountPath: {{ .Values.deployment.containers.volumeMounts.mountPath }}
+              name: {{ .Values.deployment.containers.volumeMounts.name }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -61,3 +61,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: {{ .Values.deployment.volumes.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.deployment.volumes.persistentVolumeClaimName }}

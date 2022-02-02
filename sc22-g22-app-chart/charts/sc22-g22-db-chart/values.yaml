@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: localhost:32000/postgres
+  repository: postgres
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "13.1-alpine"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -79,3 +79,19 @@ tolerations: []
 affinity: {}
 
 initialDelaySeconds: 60
+
+deployment:
+  containers:
+    ports:
+      containerPort: 5432
+    envFrom:
+      configMapRefName: postgres-config
+    env:
+      secretName: postgres-secret
+      secretKey: POSTGRES_PASSWORD
+    volumeMounts:
+      mountPath: /var/lib/postgresql/data
+      name: postgredb
+  volumes:
+    name: postgredb
+    persistentVolumeClaimName: postgres-pv-claim
