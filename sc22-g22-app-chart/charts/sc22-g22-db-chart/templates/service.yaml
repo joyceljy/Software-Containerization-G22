@@ -8,8 +8,6 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+      nodePort: {{ .Values.service.nodePort }}
   selector:
     {{- include "sc22-g22-db-chart.selectorLabels" . | nindent 4 }}

@@ -38,7 +38,8 @@ securityContext: {}
 
 service:
   type: NodePort
-  port: 80
+  port: 5432
+  nodePort: 30001
 
 ingress:
   enabled: false
@@ -84,14 +85,21 @@ deployment:
   containers:
     ports:
       containerPort: 5432
-    envFrom:
-      configMapRefName: postgres-config
-    env:
-      secretName: postgres-secret
-      secretKey: POSTGRES_PASSWORD
     volumeMounts:
       mountPath: /var/lib/postgresql/data
       name: postgredb
   volumes:
     name: postgredb
     persistentVolumeClaimName: postgres-pv-claim
+
+secrets:
+  metadata:
+    name: postgres-secret
+  password: POSTGRES_PASSWORD
+
+configMap:
+  metadata:
+    name: postgres-config
+  data:
+    POSTGRES_DB: postgresdb
+    POSTGRES_USER: postgresadmin
