@@ -92,7 +92,7 @@ deployment:
 secrets:
   metadata:
     name: sc22-g22-db-secret
-  password: SC22_G22_DB_PASSWORD
+  password: POSTGRES_PASSWORD
 
 configMap:
   metadata:
@@ -111,7 +111,7 @@ storage:
       accessModes:
         - ReadWriteOnce
       hostPath:
-        path: "/opt/postgres/data"
+        path: /opt/postgres/data
   pvc:
     metadata:
       name: sc22-g22-db-pv-claim
