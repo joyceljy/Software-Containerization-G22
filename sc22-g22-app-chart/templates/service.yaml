@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "sc22-g22-app-chart.fullname" . }}
+  labels:
+    {{- include "sc22-g22-app-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 5000
+  selector:
+    {{- include "sc22-g22-app-chart.selectorLabels" . | nindent 4 }}
