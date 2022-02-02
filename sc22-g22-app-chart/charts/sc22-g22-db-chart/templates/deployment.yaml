@@ -62,6 +62,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: {{ .Values.deployment.volumes.name }}
+        - name: {{ .Values.deployment.containers.volumeMounts.name }}
           persistentVolumeClaim:
-            claimName: {{ .Values.deployment.volumes.persistentVolumeClaimName }}
+            claimName: {{ .Values.storage.pvc.metadata.name }}

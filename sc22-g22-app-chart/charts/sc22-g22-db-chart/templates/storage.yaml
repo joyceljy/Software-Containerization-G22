@@ -1,0 +1,28 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ .Values.storage.pv.metadata.name }}
+  labels:
+    {{- include "sc22-g22-db-chart.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.storage.pv.spec.storageClassName }}
+  capacity:
+    storage: {{ .Values.storage.pv.spec.storage }}
+  accessModes:
+    {{- range .Values.storage.pv.spec.accessModes }}
+    {{- end }}
+  hostPath:
+    path: {{ .Values.storage.pv.spec.hostPath.path }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.storage.pvc.metadata.name }}
+spec:
+  storageClassName: {{ .Values.storage.pv.spec.storageClassName }}
+  accessModes:
+    {{- range .Values.storage.pv.spec.accessModes }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.pv.spec.storage }}

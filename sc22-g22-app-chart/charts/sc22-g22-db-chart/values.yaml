@@ -88,9 +88,6 @@ deployment:
     volumeMounts:
       mountPath: /var/lib/postgresql/data
       name: postgredb
-  volumes:
-    name: postgredb
-    persistentVolumeClaimName: postgres-pv-claim
 
 secrets:
   metadata:
@@ -103,3 +100,23 @@ configMap:
   data:
     POSTGRES_DB: postgresdb
     POSTGRES_USER: postgresadmin
+
+storage:
+  pv:
+    metadata:
+      name: postgres-pv-volume
+    spec:
+      storageClassName: microk8s-hostpath
+      storage: 5Gi
+      accessModes:
+        - ReadWriteOnce
+      hostPath:
+        path: "/opt/postgres/data"
+  pvc:
+    metadata:
+      name: postgres-pv-claim
+    spec:
+      storageClassName: microk8s-hostpath
+      accessModes:
+        - ReadWriteOnce
+      storage: 5Gi
