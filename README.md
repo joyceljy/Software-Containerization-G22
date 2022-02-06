@@ -49,6 +49,11 @@ kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin
 
 <h3>Run the website</h3>
 
+<h3> Helm chart </h3>
+helm install sc22-g22-app ./sc22-g22-app-chart <br>
+Unfortunately this will only create the images but because the .net required the ip address of the database and that can only be known after the installation so the net core service will always fail <br>
+helm uninstall sc22-g22-app <br>
+
 <h3>Rollout:</h3>
 cd ClientApp/<br>
 kubectl set image deployment/angular-deployment angular-container=gcr.io/sc-g22/angular:v1  --record <br>
@@ -67,3 +72,10 @@ kubectl get pods --show-labels<br>
 kubectl scale --replicas=10 deploy angular-deployment-v2<br>
 kubectl delete deployment angular-deployment<br>
 kubectl get pods --show-labels<br>
+
+<h3> How to uninstall </h3>
+To uninstall manually, all objects that were applied by YAML manifests should be deleted.
+You will have to manually remove the files of the database that were stored in the hostPath:
+sudo rm -r /opt/postgres/data
+
+
