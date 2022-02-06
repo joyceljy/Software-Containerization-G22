@@ -19,3 +19,22 @@ spec:
         image: gcr.io/sc-g22/angular:v1
         ports:
         - containerPort: 80
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "angular-hpa-crkb"
+  namespace: "default"
+  labels:
+    app: "angular"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "angular"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80
