@@ -8,8 +8,6 @@ namespace Blog.Models
 	{
         
 		[Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(Order=1, TypeName="serial")]        
 		public int PostId { get; set; }
 		[Required]
 		public string Creator { get; set; }

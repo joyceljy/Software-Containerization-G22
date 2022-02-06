@@ -1,0 +1,20 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "sc22-g22-app-chart.fullname" . }}
+  labels:
+    {{- include "sc22-g22-app-chart.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes:
+    {{- range .Values.networkPolicy.policyTypes }}
+    - {{ . }}
+    {{- end }}
+  egress:
+    - to:
+      - ipBlock:
+          cidr: {{ .Values.networkPolicy.egress.cidr }}
+          except:
+            {{- range .Values.networkPolicy.egress.except }}
+            - {{ . }}
+            {{- end }}
