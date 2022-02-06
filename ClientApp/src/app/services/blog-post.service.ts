@@ -18,8 +18,7 @@ export class BlogPostService {
     })
   };
   constructor(private http: HttpClient) {
-    this.myAppUrl = 'http://35.205.127.220:8081/';
-
+    this.myAppUrl = '127.0.0.1:8081/';
     this.myApiUrl = 'api/BlogPosts/';
   }
 

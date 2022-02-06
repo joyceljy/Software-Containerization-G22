@@ -23,8 +23,7 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations:
-  "cni.projectcalico.org/ipAddrs": "[\"10.1.96.100\"]"
+podAnnotations: {}
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -42,7 +41,7 @@ service:
   protocol: TCP
   port: 5432
   targetPort: 80
-  nodePort: 30001
+  # nodePort: 30001
 
 ingress:
   enabled: false

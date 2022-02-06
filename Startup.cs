@@ -40,7 +40,8 @@ namespace Blog
 
             IConfigurationSection dbConfig = Configuration.GetSection("DBConnection");
             string connectionstring = "Host="+dbConfig["Host"]+";Port="+dbConfig["Port"]+";Username="+dbConfig["User"]+";Password="+dbConfig["Password"]+";Database="+dbConfig["Database"]+";";
-            services.AddDbContext<BlogPostsContext>(options => options.UseNpgsql(connectionstring));
+            services.AddDbContext<BlogPostsContext>(options => options.UseNpgsql("<connectionstring>", options => options.EnableRetryOnFailure(10)));
+            
 
             services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
         }
