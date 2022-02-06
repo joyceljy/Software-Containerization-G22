@@ -102,10 +102,14 @@ namespace Blog.Controllers
                 return BadRequest(ModelState);
             }
             Random rnd = new Random();
+<<<<<<< HEAD
             blogPost.PostId = _context.BlogPosts.Count() + 1;
             BlogPost b = new BlogPost {PostId = rnd.Next(10) + 1, Creator = blogPost.Creator, Title = "Test", Body = blogPost.Title, Dt = new DateTime()};
                 _context.BlogPosts.Add(b);
                 _context.SaveChanges();
+=======
+            blogPost.PostId = rnd.Next(1,1000) + rnd.Next(1,1000);
+>>>>>>> 02ffc98fbc68454a30bb779890b254bc03bd1db2
 
             Console.WriteLine(blogPost);
 
