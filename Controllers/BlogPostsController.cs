@@ -102,12 +102,14 @@ namespace Blog.Controllers
                 return BadRequest(ModelState);
             }
             Random rnd = new Random();
-            blogPost.PostId = rnd.Next(1,1000) + rnd.Next(1,1000);
+            blogPost.PostId = _context.BlogPosts.Count() + 1;
+            BlogPost b = new BlogPost {PostId = rnd.Next(10) + 1, Creator = blogPost.Creator, Title = "Test", Body = blogPost.Title, Dt = new DateTime()};
+                _context.BlogPosts.Add(b);
+                _context.SaveChanges();
 
-            _repo.Add(blogPost);
-            var save = await _repo.SaveAsync(blogPost);
+            Console.WriteLine(blogPost);
 
-            return CreatedAtAction("GetBlogPost", new { id = blogPost.PostId }, blogPost);
+            return Ok(blogPost);
         }
 
         // DELETE: api/BlogPosts/5
