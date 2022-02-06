@@ -1,40 +1,21 @@
-apiVersion: apps/v1 
-kind: Deployment 
-metadata: 
-  name: angular-deployment 
-  labels: 
-    app: angular 
-spec: 
-  replicas: 3 
-  selector: 
-    matchLabels: 
-      app: angular 
-  template: 
-    metadata: 
-      labels: 
-        app: angular 
-    spec: 
-      containers: 
-      - name: angular-container 
-        image: gcr.io/sc-g22/angular:v1 
-        ports: 
-        - containerPort: 80 
-apiVersion: "autoscaling/v2beta1"
-kind: "HorizontalPodAutoscaler"
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: "angular-hpa-crkb"
-  namespace: "default"
+  name: angular-deployment
   labels:
-    app: "angular"
+    app: angular
 spec:
-  scaleTargetRef:
-    kind: "Deployment"
-    name: "angular"
-    apiVersion: "apps/v1"
-  minReplicas: 1
-  maxReplicas: 5
-  metrics:
-  - type: "Resource"
-    resource:
-      name: "cpu"
-      targetAverageUtilization: 80
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular
+  template:
+    metadata:
+      labels:
+        app: angular
+    spec:
+      containers:
+      - name: angular-container
+        image: gcr.io/sc-g22/angular:v1
+        ports:
+        - containerPort: 80

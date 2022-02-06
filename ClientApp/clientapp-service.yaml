@@ -1,13 +1,12 @@
-apiVersion: v1 
-kind: Service 
-metadata: 
-  name: angular-service 
-spec: 
-  type: NodePort 
-  ports: 
-   - protocol: TCP 
-     nodePort: 30003 
-     port: 8091 
-     targetPort: 80 
-  selector: 
-    app: angular
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular-service
+spec:
+  type: LoadBalancer
+  ports:
+   - protocol: TCP
+     port: 8091
+     targetPort: 80
+  selector:
+    app: nginx-1

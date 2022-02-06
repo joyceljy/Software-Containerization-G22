@@ -27,6 +27,6 @@ dependencies:
 - name: sc22-g22-api-chart
   version: "1.0.0"
   repository: "file://./charts/sc22-g22-api-chart"
-- name: sc22-g22-api-chart
+- name: sc22-g22-db-chart
   version: "1.0.0"
   repository: "file://./charts/sc22-g22-db-chart"

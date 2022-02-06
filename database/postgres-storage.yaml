@@ -12,7 +12,7 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/opt/postgres/data"
+    path: "/home/joyceljy6256/Software-Containerization-G22/opt/postgres/data"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
