@@ -20,6 +20,10 @@ spec:
       - name: angular-container
         image: gcr.io/sc-g22/angular:v1
         imagePullPolicy: "Always"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "1m"
         ports:
         - containerPort: 80
         env:

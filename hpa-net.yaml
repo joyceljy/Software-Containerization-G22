@@ -1,14 +1,14 @@
 apiVersion: "autoscaling/v2beta1"
 kind: "HorizontalPodAutoscaler"
 metadata:
-  name: "nginx-2-hpa-crkb"
+  name: "sc-netcore-hpa-crkb"
   namespace: "default"
   labels:
-    app: "nginx-2"
+    app: "netcore"
 spec:
   scaleTargetRef:
     kind: "Deployment"
-    name: "nginx-2"
+    name: "sc-netcore3-deployment"
     apiVersion: "apps/v1"
   minReplicas: 1
   maxReplicas: 5
@@ -16,4 +16,4 @@ spec:
   - type: "Resource"
     resource:
       name: "cpu"
-      targetAverageUtilization: 80
+      targetAverageUtilization: 1
