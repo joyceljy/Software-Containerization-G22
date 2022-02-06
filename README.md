@@ -1,46 +1,81 @@
-# Blog
-Angular 8 CRUD blog app with .NET Core 2.2 and Entity Framework back-end
+<h1> How to run our project: </h1>
 
-Tutorial part 1: Build a Simple CRUD App with Angular 8 and ASP.NET Core 2.2 - part 1 - back-end
-https://dev.to/dileno/build-a-simple-crud-app-with-angular-8-and-asp-net-core-2-2-part-1-back-end-39e1
+<h3>Building the database:</h3>
+ cd ../database
+kubectl apply -f postgres-config.yaml<br>
+kubectl apply -f postgres-secret.yaml<br>
+kubectl apply -f postgres-deployment.yaml<br>
+kubectl apply -f postgres-service.yaml<br>
+kubectl apply -f postgres-storage.yaml<br>
+Building the net images:</h3>
+cd ..<br>
+docker build --no-cache -t gcr.io/sc-g22/net:v1 .<br>
+docker push gcr.io/sc-g22/net:v1<br>
+kubectl apply -f deployment.yaml<br>
+kubectl apply -f service.yml<br>
 
-Tutorial part 2: Build an Angular 8 App with REST API and ASP.NET Core 2.2 - part 2
-https://dev.to/dileno/build-an-angular-8-app-with-rest-api-and-asp-net-core-2-2-part-2-46ap
+<h3>Building the angular images:</h3>
+change the ip for .net in services<br>
+docker build --no-cache -t gcr.io/sc-g22/angular:v1 .<br>
+docker push gcr.io/sc-g22/angular:v1<br>
+cd ClientApp/<br>
+kubectl apply -f clientapp-service.yaml<br>
+kubectl apply -f clientapp-deployment.yaml<br>
 
-## Prerequisites
+<h3>Network policy yaml file:</h3>
+kubectl run pod3 --image=alpine  -it -- ash <br>
+wget http://34.79.215.47:8091/ [address of frontend]<br>
+kubectl apply -f policy1.yaml<br>
+kubectl exec pod3 -it -- ash<br>
+wget http://34.79.215.47:8091/ [address of frontend]<br>
 
-* [.NET Core 2.2 SDK](https://dotnet.microsoft.com/download)
+<h3>Roles and rolebinding yaml files and the owners on GCP-IAM&Admin:</h3>
+kubectl apply -f blog-role.yaml<br>
+kubectl apply -f blog-rolebinding.yaml<br>
+kubectl auth can-i get pod --namespace default --as joyceljy6256@gmail.com (yes)<br>
+kubectl auth can-i get pod --namespace default --as joyce@gmail.com (no)<br>
+kubectl auth can-i create pod --namespace default --as daumantas.patapas@gmail.com (yes)<br>
 
-* [Visual Studio 2019](https://visualstudio.microsoft.com/vs/)
+<h3>Certificates</h3>
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes<br>
+kubectl create secret tls mynewsecret --key key.pem --cert cert.pem<br>
 
-For the Angular front-end we'll also use:
+<h3>Autoscaling the application</h3>
+kubectl apply -f hpa-net.yaml<br>
+kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://35.205.127.220:8081/api/BlogPosts; done"<br>
+cd ClientApp/<br>
+kubectl apply -f hpa-angular.yaml<br>
+kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://34.79.215.47:8091/; done"<br>
 
-* [VS Code](https://code.visualstudio.com/)
+<h3>Run the website</h3>
 
-* [Node.js](https://nodejs.org/en/)
+<h3> Helm chart </h3>
+helm install sc22-g22-app ./sc22-g22-app-chart <br>
+Unfortunately this will only create the images but because the .net required the ip address of the database and that can only be known after the installation so the net core service will always fail <br>
+helm uninstall sc22-g22-app <br>
 
-* [Angular CLI](https://cli.angular.io/)
+<h3>Rollout:</h3>
+cd ClientApp/<br>
+kubectl set image deployment/angular-deployment angular-container=gcr.io/sc-g22/angular:v1  --record <br>
+docker build --no-cache -t gcr.io/sc-g22/angular:v2 .     (make a new version of image)<br>
+docker push gcr.io/sc-g22/angular:v2<br>
+kubectl set image deployment/angular-deployment angular-container=gcr.io/sc-g22/angular:v2  --record  (change the image version in clientapp-deployment.yaml)<br>
+kubectl describe deployment angular-deployment   (see the image has updated to v2)<br>
+kubectl rollout history deployment/angular-deployment<br>
+kubectl rollout undo deployment/angular-deployment --to-revision=   (rollback to v1)<br>
+kubectl describe deployment angular-deployment (see the image has rolled back  to v1)<br>
 
-If you clone the repo, make sure you setup the database and Entity Framework migrations!
-This is how:
+<h3>Canary Deployment:</h3>
+kubectl apply -f clientapp-deployment2.yaml<br>
+kubectl scale --replicas=9 deploy angular-deployment<br>
+kubectl get pods --show-labels<br>
+kubectl scale --replicas=10 deploy angular-deployment-v2<br>
+kubectl delete deployment angular-deployment<br>
+kubectl get pods --show-labels<br>
 
-In Visual Studio 2019:
+<h3> How to uninstall </h3>
+To uninstall manually, all objects that were applied by YAML manifests should be deleted.
+You will have to manually remove the files of the database that were stored in the hostPath:
+sudo rm -r /opt/postgres/data
 
-1. Remove the contents of the folder Migrations.
-2. Then open the Package Manager Console (Tools->Nuget Package Manager->Package Manager Console).
-3. Run the following commands:
 
-```
-Add-Migration Initial
-Update-Database
-```
-
-4. Now press F5 and run the application. You will have an empty blog list to start with.
-
-## Debugging
-If you get an error message running the app, first make sure you installed node modules using the npm install command.
-In VS Code or in the Node.js command prompt, run `npm install` in the ClientApp folder.
-
-Make sure you've installed the following as well:
-1. Angular CLI using the `npm install -g @angular/cli command`.
-2. @angular-devkit/build-angular module using the `npm install --save-dev @angular-devkit/build-angular command`.
