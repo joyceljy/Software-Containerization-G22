@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: angular-deployment
+  name: angular-deployment-v2
   labels:
     app: angular
 spec:
@@ -9,12 +9,12 @@ spec:
   selector:
     matchLabels:
       app: angular
-      version: v1.0.0
+      version: v2.0.0
   template:
     metadata:
       labels:
         app: angular
-        version: v1.0.0
+        version: v2.0.0
     spec:
       containers:
       - name: angular-container
@@ -24,4 +24,4 @@ spec:
         - containerPort: 80
         env:
         - name: VERSION
-          value: v1.0.0
+          value: v2.0.0
