@@ -22,9 +22,8 @@ namespace Blog.Migrations
             modelBuilder.Entity("Blog.Models.BlogPost", b =>
                 {
                     b.Property<int>("PostId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .IsRequired()
+                        .HasColumnType("int");
 
                     b.Property<string>("Body")
                         .IsRequired()

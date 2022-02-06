@@ -15,10 +15,29 @@ spec:
     spec:
       containers:
       - name: sc-netcore3-container
-        image: gcr.io/sc-g22/net:v1
+        image: localhost:32000/net-core3
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
         - containerPort: 80
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "sc-netcore-hpa-crkb"
+  namespace: "default"
+  labels:
+    app: "netcore"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "netcore"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80
