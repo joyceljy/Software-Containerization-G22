@@ -1,18 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-    name: angular-ingress
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$1
+  name: angular-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: ingress-ip
+  labels:
+    app: ingress_label
 spec:
-  rules:
-    - host: localhost
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: angular-service
-                port:
-                  number: 80
+  defaultBackend:
+    service:
+      name: angular-service
+      port:
+        number: 8091

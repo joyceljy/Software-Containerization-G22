@@ -1,0 +1,19 @@
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "nginx-2-hpa-crkb"
+  namespace: "default"
+  labels:
+    app: "nginx-2"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "nginx-2"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80

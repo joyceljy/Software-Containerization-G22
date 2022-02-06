@@ -93,7 +93,7 @@ namespace Blog.Controllers
             return NoContent();
         }
 
-        // POST: api/BlogPosts
+       // POST: api/BlogPosts
         [HttpPost]
         public async Task<IActionResult> PostBlogPost([FromBody] BlogPost blogPost)
         {
@@ -101,13 +101,16 @@ namespace Blog.Controllers
             {
                 return BadRequest(ModelState);
             }
+            Random rnd = new Random();
+            blogPost.PostId = _context.BlogPosts.Count() + 1;
+            BlogPost b = new BlogPost {PostId = rnd.Next(10) + 1, Creator = blogPost.Creator, Title = "Test", Body = blogPost.Title, Dt = new DateTime()};
+                _context.BlogPosts.Add(b);
+                _context.SaveChanges();
 
-            _repo.Add(blogPost);
-            var save = await _repo.SaveAsync(blogPost);
+            Console.WriteLine(blogPost);
 
-            return CreatedAtAction("GetBlogPost", new { id = blogPost.PostId }, blogPost);
+            return Ok(blogPost);
         }
-
         // DELETE: api/BlogPosts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBlogPost([FromRoute] int id)
