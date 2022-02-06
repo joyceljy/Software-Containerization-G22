@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-deployment-v2
+  labels:
+    app: angular
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular
+      version: v2.0.0
+  template:
+    metadata:
+      labels:
+        app: angular
+        version: v2.0.0
+    spec:
+      containers:
+      - name: angular-container
+        image: gcr.io/sc-g22/angular:v1
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 80
+        env:
+        - name: VERSION
+          value: v2.0.0

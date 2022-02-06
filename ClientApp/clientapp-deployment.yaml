@@ -9,16 +9,22 @@ spec:
   selector:
     matchLabels:
       app: angular
+      version: v1.0.0
   template:
     metadata:
       labels:
         app: angular
+        version: v1.0.0
     spec:
       containers:
       - name: angular-container
         image: gcr.io/sc-g22/angular:v1
+        imagePullPolicy: "Always"
         ports:
         - containerPort: 80
+        env:
+        - name: VERSION
+          value: v1.0.0
 apiVersion: "autoscaling/v2beta1"
 kind: "HorizontalPodAutoscaler"
 metadata:
