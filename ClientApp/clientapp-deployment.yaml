@@ -16,6 +16,6 @@ spec:
     spec: 
       containers: 
       - name: angular-container 
-        image: localhost:32000/angulartest7:latest 
+        image: gcr.io/sc-g22/angular:v1 
         ports: 
         - containerPort: 80 

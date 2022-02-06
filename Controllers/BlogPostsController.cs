@@ -101,6 +101,8 @@ namespace Blog.Controllers
             {
                 return BadRequest(ModelState);
             }
+            Random rnd = new Random();
+            blogPost.PostId = rnd.Next(1,1000) + rnd.Next(1,1000);
 
             _repo.Add(blogPost);
             var save = await _repo.SaveAsync(blogPost);

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: sc-netcore3-container
-        image: localhost:32000/netcoretest10:latest
+        image: gcr.io/sc-g22/net:v1
         resources:
           limits:
             memory: "128Mi"
